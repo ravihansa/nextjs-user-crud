@@ -3,22 +3,63 @@ import {
     useReactTable,
     getCoreRowModel,
     getPaginationRowModel,
-    flexRender
+    flexRender,
+    createColumnHelper
 } from "@tanstack/react-table";
 import "@/styles/userTable.css";
 
-const UserTable = ({ data }) => {
+const UserTable = ({ data, onUpdateUser, onDeleteUser }) => {
+    const columnHelper = createColumnHelper();
+
     const columns = [
-        { accessorKey: "id", header: "ID" },
-        { accessorKey: "userName", header: "Username" },
-        { accessorKey: "email", header: "Email" },
-        { accessorKey: "fName", header: "First Name" },
-        { accessorKey: "lName", header: "Last Name" },
+        columnHelper.accessor("id", {
+            header: "ID",
+            cell: (info) => info.getValue()
+        }),
+        columnHelper.accessor("userName", {
+            header: "Username",
+            cell: (info) => info.getValue()
+        }),
+        columnHelper.accessor("email", {
+            header: "Email",
+            cell: (info) => info.getValue()
+        }),
+        columnHelper.accessor("fName", {
+            header: "First Name",
+            cell: (info) => info.getValue()
+        }),
+        columnHelper.accessor("lName", {
+            header: "Last Name",
+            cell: (info) => info.getValue()
+        }),
+        columnHelper.display({
+            id: 'actions',
+            header: 'Actions',
+            cell: (props) => {
+                const user = props.row.original;
+                return (
+                    <div className="action-buttons">
+                        <button
+                            className="update-btn"
+                            onClick={() => onUpdateUser(user)}
+                        >
+                            UPDATE
+                        </button>
+                        <button
+                            className="delete-btn"
+                            onClick={() => onDeleteUser(user)}
+                        >
+                            DELETE
+                        </button>
+                    </div>
+                );
+            }
+        })
     ];
 
     const [pagination, setPagination] = useState({
         pageIndex: 0,
-        pageSize: 10, // Number of rows per page
+        pageSize: 10,
     });
 
     const table = useReactTable({
