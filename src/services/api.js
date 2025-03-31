@@ -14,3 +14,12 @@ export const updateUser = async (user) => {
         body: JSON.stringify(user)
     });
 };
+
+export const deleteUser = async (userId) => {
+    return fetch(`${BASE_URL}api/v1/users/${userId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+};

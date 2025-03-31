@@ -2,12 +2,15 @@
 import { useEffect, useState } from "react";
 import UserTable from "@/components/userTable";
 import UpdateUserModal from "@/components/updateUserModal";
-import { getAllUsers, updateUser } from "@/services/api";
+import { getAllUsers, updateUser, deleteUser } from "@/services/api";
+import DeleteConfirmationModal from '@/components/common/deleteConfirmationModal';
 
 const UserList = () => {
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [deletingUserId, setDeletingUserId] = useState(null);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     const getUsers = async () => {
         try {
@@ -32,7 +35,7 @@ const UserList = () => {
         setIsUpdateModalOpen(true);
     };
 
-    const handleModalClose = () => {
+    const handleUpdateModalClose = () => {
         setIsUpdateModalOpen(false);
         setSelectedUser(null);
     };
@@ -48,7 +51,7 @@ const UserList = () => {
                         user.id === updatedUser.id ? updatedUser : user
                     )
                 );
-                handleModalClose();
+                handleUpdateModalClose();
             } else {
                 console.error(response.message);
             }
@@ -58,6 +61,35 @@ const UserList = () => {
     };
 
     const handleDeleteUser = async (user) => {
+        setDeletingUserId(user.id);
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleDeleteModalClose = () => {
+        setIsDeleteModalOpen(false);
+        setDeletingUserId(null);
+    };
+
+    const handleUserDelete = async () => {
+        if (!deletingUserId) return;
+
+        try {
+            const res = await deleteUser(deletingUserId);
+            const response = await res.json();
+            if (response.status) {
+                // Remove deleted user from the user list
+                setUsers(prevUsers =>
+                    prevUsers.filter(user =>
+                        user.id !== deletingUserId
+                    )
+                );
+                handleDeleteModalClose();
+            } else {
+                console.error(response.message);
+            }
+        } catch (error) {
+            console.error("Failed to delete user", error.message);
+        }
     };
 
     return (
@@ -69,9 +101,15 @@ const UserList = () => {
             />
             <UpdateUserModal
                 isOpen={isUpdateModalOpen}
-                onClose={handleModalClose}
+                onClose={handleUpdateModalClose}
                 user={selectedUser}
                 onUpdateUser={handleUserUpdate}
+            />
+            <DeleteConfirmationModal
+                isOpen={isDeleteModalOpen}
+                onClose={handleDeleteModalClose}
+                onConfirm={handleUserDelete}
+                message="Deleting this user will remove all user related data. This action cannot be undone."
             />
         </div>
     );
