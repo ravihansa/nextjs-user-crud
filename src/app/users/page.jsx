@@ -5,6 +5,7 @@ import UpdateUserModal from "@/components/updateUserModal";
 import { getAllUsers, updateUser, deleteUser } from "@/services/api";
 import DeleteConfirmationModal from '@/components/common/deleteConfirmationModal';
 import Loader from '@/components/common/loader';
+import { useAlerts } from '@/components/common/alertProvider';
 
 const UserList = () => {
     const [users, setUsers] = useState([]);
@@ -13,6 +14,7 @@ const UserList = () => {
     const [deletingUserId, setDeletingUserId] = useState(null);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const { successAlert, errorAlert, warningAlert, infoAlert } = useAlerts();
 
     const getUsers = async () => {
         try {
@@ -20,11 +22,12 @@ const UserList = () => {
             const response = await res.json();
             if (response.status) {
                 setUsers(response.data);
+                infoAlert(response.message, { autoClose: 1000 });
             } else {
-                console.error(response.message);
+                warningAlert(response.message);
             }
         } catch (error) {
-            console.error("Failed to fetch users", error.message);
+            errorAlert(error.message || 'An error occurred!');
         } finally {
             setLoading(false);
         }
@@ -51,6 +54,7 @@ const UserList = () => {
             const response = await res.json();
             if (response.status) {
                 // Update the users list with the updated user
+                successAlert(response.message);
                 setUsers(prevUsers =>
                     prevUsers.map(user =>
                         user.id === updatedUser.id ? updatedUser : user
@@ -58,10 +62,10 @@ const UserList = () => {
                 );
                 handleUpdateModalClose();
             } else {
-                console.error(response.message);
+                warningAlert(response.message);
             }
         } catch (error) {
-            console.error("Failed to update user", error.message);
+            errorAlert(error.message || 'An error occurred!');
         } finally {
             setLoading(false);
         }
@@ -86,6 +90,7 @@ const UserList = () => {
             const response = await res.json();
             if (response.status) {
                 // Remove deleted user from the user list
+                successAlert(response.message);
                 setUsers(prevUsers =>
                     prevUsers.filter(user =>
                         user.id !== deletingUserId
@@ -93,10 +98,10 @@ const UserList = () => {
                 );
                 handleDeleteModalClose();
             } else {
-                console.error(response.message);
+                warningAlert(response.message);
             }
         } catch (error) {
-            console.error("Failed to delete user", error.message);
+            errorAlert(error.message || 'An error occurred!');
         } finally {
             setLoading(false);
         }
