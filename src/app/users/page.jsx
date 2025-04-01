@@ -4,9 +4,11 @@ import UserTable from "@/components/userTable";
 import UpdateUserModal from "@/components/updateUserModal";
 import { getAllUsers, updateUser, deleteUser } from "@/services/api";
 import DeleteConfirmationModal from '@/components/common/deleteConfirmationModal';
+import Loader from '@/components/common/loader';
 
 const UserList = () => {
     const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [selectedUser, setSelectedUser] = useState(null);
     const [deletingUserId, setDeletingUserId] = useState(null);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
@@ -23,6 +25,8 @@ const UserList = () => {
             }
         } catch (error) {
             console.error("Failed to fetch users", error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -42,6 +46,7 @@ const UserList = () => {
 
     const handleUserUpdate = async (updatedUser) => {
         try {
+            setLoading(true);
             const res = await updateUser(updatedUser);
             const response = await res.json();
             if (response.status) {
@@ -57,6 +62,8 @@ const UserList = () => {
             }
         } catch (error) {
             console.error("Failed to update user", error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -74,6 +81,7 @@ const UserList = () => {
         if (!deletingUserId) return;
 
         try {
+            setLoading(true);
             const res = await deleteUser(deletingUserId);
             const response = await res.json();
             if (response.status) {
@@ -89,6 +97,8 @@ const UserList = () => {
             }
         } catch (error) {
             console.error("Failed to delete user", error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -111,6 +121,7 @@ const UserList = () => {
                 onConfirm={handleUserDelete}
                 message="Deleting this user will remove all user related data. This action cannot be undone."
             />
+            {loading && <Loader size="large" color="#0000FF" />}
         </div>
     );
 };
