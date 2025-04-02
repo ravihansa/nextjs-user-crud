@@ -23,3 +23,13 @@ export const deleteUser = async (userId) => {
         }
     });
 };
+
+export const logInUser = async (userData) => {
+    return fetch(`${BASE_URL}api/v1/auth/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData)
+    });
+};

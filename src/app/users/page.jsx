@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import UserTable from "@/components/userTable";
-import UpdateUserModal from "@/components/updateUserModal";
+import UserTable from "@/components/user/userTable";
+import UpdateUserModal from "@/components/user/updateUserModal";
 import { getAllUsers, updateUser, deleteUser } from "@/services/api";
 import DeleteConfirmationModal from '@/components/common/deleteConfirmationModal';
 import Loader from '@/components/common/loader';
