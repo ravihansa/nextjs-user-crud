@@ -1,12 +1,13 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import { apiRequest } from "./apiClient";
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 
 export const getAllUsers = async () => {
-    return fetch(`${BASE_URL}api/v1/users/list`);
+    return apiRequest(`api/v1/users/list`);
 };
 
 export const updateUser = async (user) => {
-    return fetch(`${BASE_URL}api/v1/users/${user.id}`, {
+    return apiRequest(`api/v1/users/${user.id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -16,7 +17,7 @@ export const updateUser = async (user) => {
 };
 
 export const deleteUser = async (userId) => {
-    return fetch(`${BASE_URL}api/v1/users/${userId}`, {
+    return apiRequest(`api/v1/users/${userId}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -25,7 +26,7 @@ export const deleteUser = async (userId) => {
 };
 
 export const logInUser = async (userData) => {
-    return fetch(`${BASE_URL}api/v1/auth/login`, {
+    return fetch(`${apiBaseUrl}api/v1/auth/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
