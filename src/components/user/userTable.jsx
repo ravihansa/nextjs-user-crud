@@ -6,6 +6,7 @@ import {
     flexRender,
     createColumnHelper
 } from "@tanstack/react-table";
+import RoleBasedContent from '@/components/guards/roleBasedContent';
 import "@/styles/userTable.css";
 
 const UserTable = ({ data, onUpdateUser, onDeleteUser }) => {
@@ -45,12 +46,14 @@ const UserTable = ({ data, onUpdateUser, onDeleteUser }) => {
                         >
                             UPDATE
                         </button>
-                        <button
-                            className="delete-btn"
-                            onClick={() => onDeleteUser(user)}
-                        >
-                            DELETE
-                        </button>
+                        <RoleBasedContent allowedRoles={['admin']}>
+                            <button
+                                className="delete-btn"
+                                onClick={() => onDeleteUser(user)}
+                            >
+                                DELETE
+                            </button>
+                        </RoleBasedContent>
                     </div>
                 );
             }
