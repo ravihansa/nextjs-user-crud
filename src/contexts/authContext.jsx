@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [role, setRole] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [permissions, setPermissions] = useState([]);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
@@ -22,6 +23,7 @@ export const AuthProvider = ({ children }) => {
                 } else {
                     setUser(decoded.sub);
                     setRole(decoded.role);
+                    setPermissions(decoded.permissions ?? []);
                     setIsAuthenticated(true);
                 }
             } catch (err) {
@@ -41,6 +43,7 @@ export const AuthProvider = ({ children }) => {
             const decoded = jwtDecode(jwtToken);
             setUser(decoded.sub);
             setRole(decoded.role);
+            setPermissions(decoded.permissions ?? []);
             setIsAuthenticated(true);
         } catch (error) {
             console.error(error);
@@ -51,12 +54,17 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('token');
         setUser(null);
         setRole(null);
+        setPermissions([]);
         setIsAuthenticated(false);
         router.push('/login');
     };
 
+    const hasPermission = (permission) => {
+        return permissions.includes(permission);
+    };
+
     return (
-        <AuthContext.Provider value={{ isAuthenticated, loading, user, role, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, loading, user, role, login, logout, hasPermission }}>
             {children}
         </AuthContext.Provider>
     );

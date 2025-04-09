@@ -6,7 +6,7 @@ import {
     flexRender,
     createColumnHelper
 } from "@tanstack/react-table";
-import RoleBasedContent from '@/components/guards/roleBasedContent';
+import PermissionGate from '@/components/guards/permissionGate';
 import "@/styles/userTable.css";
 
 const UserTable = ({ data, onUpdateUser, onDeleteUser }) => {
@@ -40,20 +40,22 @@ const UserTable = ({ data, onUpdateUser, onDeleteUser }) => {
                 const user = props.row.original;
                 return (
                     <div className="action-buttons">
-                        <button
-                            className="update-btn"
-                            onClick={() => onUpdateUser(user)}
-                        >
-                            UPDATE
-                        </button>
-                        <RoleBasedContent allowedRoles={['admin']}>
+                        <PermissionGate permission="update-user">
+                            <button
+                                className="update-btn"
+                                onClick={() => onUpdateUser(user)}
+                            >
+                                UPDATE
+                            </button>
+                        </PermissionGate>
+                        <PermissionGate permission="delete-user">
                             <button
                                 className="delete-btn"
                                 onClick={() => onDeleteUser(user)}
                             >
                                 DELETE
                             </button>
-                        </RoleBasedContent>
+                        </PermissionGate>
                     </div>
                 );
             }
