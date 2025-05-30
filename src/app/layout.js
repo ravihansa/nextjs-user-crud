@@ -3,6 +3,7 @@ import "./globals.css";
 import AlertProvider from '@/components/common/alertProvider';
 import { AuthProvider } from "@/contexts/authContext";
 import RouteGuard from '@/components/guards/routeGuard';
+import Layout from '@/components/layout/layout';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,11 +25,13 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <AlertProvider></AlertProvider>
-        <AuthProvider>
-          <RouteGuard>
-            {children}
-          </RouteGuard>
-        </AuthProvider>
+        <Layout>
+          <AuthProvider>
+            <RouteGuard>
+              {children}
+            </RouteGuard>
+          </AuthProvider>
+        </Layout>
       </body>
     </html>
   );
