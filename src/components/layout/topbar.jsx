@@ -1,12 +1,12 @@
 "use client";
-import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/authContext';
 import '@/styles/topbar.css';
 
 const Topbar = ({ onToggleSidebar }) => {
-    const router = useRouter();
+    const { user, logout } = useAuth();
 
     const handleLogout = () => {
-        router.push('/login');
+        logout();
     };
 
     return (
@@ -20,9 +20,14 @@ const Topbar = ({ onToggleSidebar }) => {
                 <h1 className="topbar-title">Dashboard</h1>
             </div>
             <div className="topbar-right">
-                <line className="logout-btn" onClick={handleLogout}>
+                {user && (
+                    <span className="user-info">
+                        Welcome {user}
+                    </span>
+                )}
+                <span className="logout-btn" onClick={handleLogout}>
                     Logout
-                </line>
+                </span>
             </div>
         </header>
     );

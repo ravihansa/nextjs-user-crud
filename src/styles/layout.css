@@ -27,6 +27,13 @@
     margin-left: 80px;
 }
 
+.auth-layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f9fa;
+}
+
 @media (max-width: 768px) {
     .main-content {
         margin-left: 0;
@@ -36,6 +43,10 @@
 
     .main-content.sidebar-collapsed {
         margin-left: 0;
+    }
+
+    .auth-layout {
+        padding: 15px;
     }
 }
 

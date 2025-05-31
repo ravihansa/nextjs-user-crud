@@ -50,7 +50,18 @@
 .topbar-right {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 5px;
+}
+
+.user-info {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.user-info:hover {
+    color: black;
+    font-weight: 500;
+    transform: translateY(-1px);
 }
 
 .logout-btn {
@@ -80,6 +91,10 @@
 
     .topbar-title {
         font-size: 18px;
+    }
+
+    .user-info {
+        display: none;
     }
 
     .logout-btn {

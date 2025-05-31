@@ -25,13 +25,13 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <AlertProvider></AlertProvider>
-        <Layout>
-          <AuthProvider>
-            <RouteGuard>
+        <AuthProvider>
+          <RouteGuard>
+            <Layout>
               {children}
-            </RouteGuard>
-          </AuthProvider>
-        </Layout>
+            </Layout>
+          </RouteGuard>
+        </AuthProvider>
       </body>
     </html>
   );
